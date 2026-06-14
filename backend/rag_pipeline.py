@@ -100,7 +100,6 @@ def build_index(reset: bool = True) -> int:
         ids.append(f"pricing-{i}")
 
     collection.add(documents=documents, metadatas=metadatas, ids=ids)
-    _collection.cache_clear()  # invalidate cached reference — collection was rebuilt
     return len(rows)
 
 
