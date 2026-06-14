@@ -570,7 +570,13 @@
 
 <script>
 /* ---------- config ---------- */
-const API = (location.protocol === 'file:') ? 'http://localhost:8000' : '';
+const API = (() => {
+  // Local dev — file:// or localhost
+  if (location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    return 'http://localhost:8000';
+  // Production — replace this with your Render/Railway backend URL
+  return 'https://gushquote.onrender.com';
+})();
 const SESSION_KEY = 'gushquote_session';
 function sessionId(){
   let s = localStorage.getItem(SESSION_KEY);

@@ -5,7 +5,10 @@ semantic `query` that returns the matching pricing rows (with their raw numeric
 metadata) for a given natural-language lead inquiry.
 
 Embeddings use ChromaDB's built-in default embedder (ONNX MiniLM, ~80 MB, no
-PyTorch), so retrieval needs no API key and stays light on disk.
+PyTorch), so retrieval needs no API key and stays light.
+
+Uses an in-memory ephemeral ChromaDB client — the index is rebuilt from CSV at
+startup, so no persistent disk is needed. Perfect for free Render/Railway hosting.
 """
 from __future__ import annotations
 
@@ -22,9 +25,6 @@ PRICING_CSV = DATA_DIR / "pricing.csv"
 DELIVERY_CSV = DATA_DIR / "delivery_fees.csv"
 COLLECTION_NAME = "pricing"
 
-# Use a persistent on-disk store so seeding and serving share the same index.
-CHROMA_DIR = Path(__file__).parent / ".chroma"
-
 
 @lru_cache(maxsize=1)
 def _embedding_fn():
@@ -35,7 +35,8 @@ def _embedding_fn():
 
 @lru_cache(maxsize=1)
 def _client() -> chromadb.ClientAPI:
-    return chromadb.PersistentClient(path=str(CHROMA_DIR))
+    """Ephemeral in-memory client — free on Render/Railway (no disk needed)."""
+    return chromadb.Client()
 
 
 def _row_to_chunk(row: dict) -> str:
