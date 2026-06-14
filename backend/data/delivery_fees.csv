@@ -1,0 +1,6 @@
+depot_zip,depot_city,zip_prefixes_served,base_delivery_fee,per_mile_rate,max_delivery_radius_miles
+60601,Chicago,"600|601|602|604|606|607|608",150,4.50,120
+46204,Indianapolis,"460|461|462|468|472|473|474",125,4.00,100
+48226,Detroit,"480|481|482|483|484|485|488",140,4.25,100
+43215,Columbus,"430|431|432|437|438",130,4.00,100
+53202,Milwaukee,"530|531|532|534|535",140,4.25,110

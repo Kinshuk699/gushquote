@@ -1,0 +1,16 @@
+equipment_type,size_class,weight_class,daily_rate,weekly_rate,monthly_rate,min_rental_days,deposit_per_unit,description
+Mini Excavator,1-3 ton,Compact,350,1050,2800,2,1500,Ideal for tight-access digging. Residential trenching. backyard pools. utility work. Zero tail-swing for confined jobsites.
+Mid Excavator,5-10 ton,Standard,650,1950,5200,3,3500,Foundation digging. medium demolition. trenching. grading. Fits on a standard lowboy trailer.
+Large Excavator,15-30 ton,Heavy,1200,3600,9500,5,6000,Mass excavation. deep foundations. quarry work. rock breaking with hydraulic hammer attachment.
+Mini Skid Steer,<1750 lbs,Compact,280,840,2200,1,1200,Landscaping. interior demo. tight spaces. Available with auger/trencher/bucket attachments.
+Mid Skid Steer,1750-2200 lbs,Standard,400,1200,3200,2,2000,General construction. grading. material handling. Compatible with 50+ attachments.
+Large Skid Steer,>2200 lbs,Heavy,550,1650,4400,3,3000,Heavy-duty grading. asphalt milling. forestry mulching. High-flow hydraulics.
+Mini Bulldozer,<100 HP,Compact,500,1500,4000,3,2500,Finish grading. light clearing. residential site prep. 6-way blade.
+Mid Bulldozer,100-200 HP,Standard,850,2550,6800,4,4500,Land clearing. road building. medium earthmoving. LGP (low ground pressure) available.
+Large Bulldozer,>200 HP,Heavy,1400,4200,11000,7,8000,Heavy earthmoving. mining overburden. large-scale grading and ripping.
+Towable Boom Lift,30-50 ft,Compact,320,960,2600,2,1500,Towable. fits through standard gates. Indoor/outdoor rated. 500lb platform capacity.
+Electric Boom Lift,40-60 ft,Standard,480,1440,3900,3,2800,Zero-emission indoor work. warehouse maintenance. narrow chassis. Quiet operation.
+Diesel Boom Lift,60-80 ft,Heavy,650,1950,5200,4,4000,Rough-terrain capable. outdoor construction. 4WD. Articulating boom for up-and-over reach.
+Towable Generator,20kW,Compact,180,540,1400,1,800,Backup power for small sites. single-phase. quiet-run enclosure. 24hr runtime per tank.
+Mid Generator,50-75kW,Standard,350,1050,2800,2,1800,Jobsite primary power. three-phase. trailer-mounted. 200A breaker panel included.
+Large Generator,>100kW,Heavy,600,1800,4800,3,3500,Full-site power for multiple trades. 480V three-phase. auto-transfer-switch compatible.
