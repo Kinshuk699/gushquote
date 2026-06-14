@@ -100,11 +100,12 @@ def build_index(reset: bool = True) -> int:
         ids.append(f"pricing-{i}")
 
     collection.add(documents=documents, metadatas=metadatas, ids=ids)
+    _collection.cache_clear()  # invalidate cached reference — collection was rebuilt
     return len(rows)
 
 
-@lru_cache(maxsize=1)
 def _collection():
+    """Get the pricing collection (always from the shared client, no stale cache)."""
     return _get_client().get_or_create_collection(
         name=COLLECTION_NAME, embedding_function=_embedding_fn()
     )
@@ -116,7 +117,6 @@ def query(text: str, n_results: int = 3) -> list[dict]:
     if collection.count() == 0:
         # Index not built yet — build it lazily so the demo never hard-fails.
         build_index()
-        _collection.cache_clear()
         collection = _collection()
 
     res = collection.query(query_texts=[text], n_results=n_results)
