@@ -76,7 +76,22 @@ _CHIT_CHAT = {
 
 
 def _is_chit_chat(message: str) -> bool:
-    return message.lower().strip().rstrip(".!?") in _CHIT_CHAT
+    t = message.lower().strip().rstrip(".!?")
+    if t in _CHIT_CHAT:
+        return True
+    # Broad match: any message starting with a casual opener or containing a question
+    casual_starts = ("hi ", "hey ", "hello", "yo ", "sup", "ok ", "okay", "thanks", "thank",
+                     "bye", "cool", "nice", "great", "no ", "nope", "not really", "never",
+                     "im ", "i'm ", "good morning", "good afternoon", "na ")
+    if t.startswith(casual_starts):
+        return True
+    # Contains a question word — likely asking about the company, not requesting equipment
+    question_words = ("what ", "who ", "where ", "when ", "why ", "how ", "which ",
+                      "tell me", "explain", "describe", "can you", "do you", "is there",
+                      "are you", "could you", "would you", "about this", "about the")
+    if any(q in t for q in question_words):
+        return True
+    return False
 
 
 def _run_pipeline(session_id: str, message: str) -> ChatResponse:
@@ -122,12 +137,16 @@ def _run_pipeline(session_id: str, message: str) -> ChatResponse:
             session["quote_sent"] = True
             session["last_quote_hash"] = _var_hash(result.variables)
         else:
-            # Variables unchanged — just acknowledge, don't re-quote.
-            agent_reply = (
-                "I just gave you that estimate — the quote card is right above. "
-                "Download the PDF, or tell me if you need a different machine, "
-                "quantity or ZIP and I'll re-run it. What else can I help with?"
-            )
+            # Variables unchanged — let the LLM/fallback handle conversation naturally.
+            preamble = result.reply_preamble.strip()
+            if preamble:
+                agent_reply = preamble
+            else:
+                agent_reply = (
+                    "That estimate is still right above. Need a different machine, "
+                    "quantity or ZIP? Or ask me anything about our fleet, delivery, "
+                    "pricing or service area."
+                )
     elif result.is_complete and is_casual:
         # Casual message after a complete quote — just be friendly.
         name = "GushQuote" if not hasattr(result.variables, "_name") else ""
