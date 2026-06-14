@@ -153,7 +153,17 @@ def _run_pipeline(session_id: str, message: str) -> ChatResponse:
 @app.post("/chat", response_model=ChatResponse)
 def chat(req: ChatRequest) -> ChatResponse:
     session_id = req.session_id or str(uuid.uuid4())
-    return _run_pipeline(session_id, req.message)
+    try:
+        return _run_pipeline(session_id, req.message)
+    except Exception as exc:
+        import traceback
+        tb = traceback.format_exc()
+        print(tb)
+        # Include the error in the reply so we can debug on Render
+        return ChatResponse(
+            agent_reply=f"Sorry, hit an error: {type(exc).__name__}: {exc}",
+            session_id=session_id,
+        )
 
 
 @app.post("/voice-webhook", response_model=ChatResponse)
