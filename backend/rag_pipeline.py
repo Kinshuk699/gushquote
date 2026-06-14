@@ -33,10 +33,17 @@ def _embedding_fn():
     return embedding_functions.ONNXMiniLM_L6_V2()
 
 
-@lru_cache(maxsize=1)
-def _client() -> chromadb.ClientAPI:
-    """Ephemeral in-memory client — free on Render/Railway (no disk needed)."""
-    return chromadb.Client()
+# Single shared ephemeral client — one in-memory database for the whole process.
+# Using a module-level variable instead of lru_cache so build_index, _collection
+# and query all see the same store. Critical for free Render/Railway hosting.
+_shared_client: chromadb.ClientAPI | None = None
+
+
+def _get_client() -> chromadb.ClientAPI:
+    global _shared_client
+    if _shared_client is None:
+        _shared_client = chromadb.Client()
+    return _shared_client
 
 
 def _row_to_chunk(row: dict) -> str:
@@ -62,7 +69,7 @@ def load_delivery_rows() -> list[dict]:
 
 def build_index(reset: bool = True) -> int:
     """(Re)build the ChromaDB pricing collection. Returns number of rows indexed."""
-    client = _client()
+    client = _get_client()
     if reset:
         try:
             client.delete_collection(COLLECTION_NAME)
@@ -98,7 +105,7 @@ def build_index(reset: bool = True) -> int:
 
 @lru_cache(maxsize=1)
 def _collection():
-    return _client().get_or_create_collection(
+    return _get_client().get_or_create_collection(
         name=COLLECTION_NAME, embedding_function=_embedding_fn()
     )
 
